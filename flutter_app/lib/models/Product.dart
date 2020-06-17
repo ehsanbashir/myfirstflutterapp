@@ -258,6 +258,8 @@ class Value {
         this.shippingZones});
 
   Value.fromJson(Map<String, dynamic> json) {
+    if(json['imageurl'] == null || json['imageurl'] =='')
+      {json['imageurl'] = 'https://upload.wikimedia.org/wikipedia/commons/0/0a/No-image-available.png';}
     searchScore = json['@search.score'];
     id = json['Id'];
     lastModificationTime = json['LastModificationTime'];

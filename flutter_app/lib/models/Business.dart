@@ -12,6 +12,8 @@ class Business
 
   Business({this.id, this.TenantId,  this.primary_name, this.alt_name, this.image_url});
   factory Business.fromJson(dynamic business){
+    if(business['image_url'] == null || business['image_url'] =='')
+    {business['image_url'] = 'https://upload.wikimedia.org/wikipedia/commons/0/0a/No-image-available.png';}
     return Business(
       id: business['id'],
       TenantId: business['TenantId'],
