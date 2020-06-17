@@ -14,6 +14,7 @@ class ProductList extends StatefulWidget {
   createState() => ProductListState();
 }
 class ProductListState extends State<ProductList>{
+  bool isFullScreenDialog = true;
   List<Value> _product = List<Value>();
 
   @override
@@ -27,22 +28,31 @@ class ProductListState extends State<ProductList>{
 
     Webservice().load(Value.all,'*').then((newsArticles) => {
       setState(() => {
-        _product = newsArticles
+        _product = newsArticles,
+        isFullScreenDialog = false,
       })
     });
 
   }
 
   Widget _buildItemsForListView(BuildContext context, int index) {
-    return GestureDetector(
+    if(_product[index].imageurl == null || _product[index].imageurl=="")
+      _product[index].imageurl = 'https://image.freepik.com/free-vector/watercolor-background_87374-69.jpg';
+    return
+    GestureDetector(
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => Business(product: _product[index]),
-            ),
-          );
+            MaterialPageRoute(builder: (context) => Business(product: _product[index]),
+          ));
+//          Navigator.push(
+//            context,
+//            MaterialPageRoute(
+//              builder: (context) => Business(product: _product[index]),
+//            ),
+//          );
         },
+
         child: Container(
           height: 130,
           child: Card(
@@ -55,7 +65,7 @@ class ProductListState extends State<ProductList>{
                         height: 100,
                         width: 100,
                         child: Image.network(
-                            _product[index].imageurl!= null? _product[index].imageurl : 'https://image.freepik.com/free-vector/watercolor-background_87374-69.jpg'
+                            _product[index].imageurl,
                         ),
                       )
 
@@ -91,10 +101,10 @@ class ProductListState extends State<ProductList>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-appBar: AppBar(
-  title: Text("Products"),
-),
-        body: Center(
+      appBar: AppBar(
+        title: Text("Products"),
+      ),
+      body: Center(
            child:Column(
               children: <Widget>[
                 TextField(

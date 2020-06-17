@@ -564,6 +564,13 @@ class Categories {
     data['alt_name'] = this.altName;
     return data;
   }
+
+
+  Categories.fromMapObject(Map<String, dynamic> map){
+    this.id = map['id'];
+    this.primaryName = map['primaryName'];
+    this.altName = map['altName'];
+  }
 }
 
 class ShippingZones {

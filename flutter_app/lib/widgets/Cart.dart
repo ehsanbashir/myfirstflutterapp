@@ -12,7 +12,6 @@ class Cart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-
         title: "App Title",
         home:  Scaffold(
             appBar: AppBar(

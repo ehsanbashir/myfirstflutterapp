@@ -11,6 +11,7 @@ class BusinessedList extends StatefulWidget {
   createState() => BusinessListState();
 }
 class BusinessListState extends State<BusinessedList>{
+  bool isFullScreenDialog = true;
   List<Business> _business = List<Business>();
 
   @override
@@ -24,14 +25,18 @@ class BusinessListState extends State<BusinessedList>{
 
     Webservice().load(Business.all,'*').then((newsArticles) => {
       setState(() => {
-        _business = newsArticles
+        _business = newsArticles,
+        isFullScreenDialog= false,
       })
     });
 
   }
 
   Widget _buildItemsForListView(BuildContext context, int index) {
-    return _business.length >0 ? GestureDetector(
+    if(_business[index].image_url == null || _business[index].image_url=="")
+      _business[index].image_url = 'https://image.freepik.com/free-vector/watercolor-background_87374-69.jpg';
+    return
+    GestureDetector(
         onTap: () {
           print(_business[index].primary_name);
         },
@@ -78,9 +83,6 @@ class BusinessListState extends State<BusinessedList>{
             ),
           ),
         )
-    )
-        : Center(
-      child: CircularProgressIndicator(),
     );
   }
   @override

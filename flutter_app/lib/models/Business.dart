@@ -4,11 +4,11 @@ import 'package:flutterapp/services/webservice.dart';
 
 class Business
 {
-  final String id;
-  final String TenantId;
-  final String primary_name;
-  final String alt_name;
-  final String image_url;
+   String id;
+   String TenantId;
+   String primary_name;
+   String alt_name;
+   String image_url;
 
   Business({this.id, this.TenantId,  this.primary_name, this.alt_name, this.image_url});
   factory Business.fromJson(dynamic business){
