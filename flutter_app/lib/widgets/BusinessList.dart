@@ -31,7 +31,7 @@ class BusinessListState extends State<BusinessedList>{
   }
 
   Widget _buildItemsForListView(BuildContext context, int index) {
-    return GestureDetector(
+    return _business.length >0 ? GestureDetector(
         onTap: () {
           print(_business[index].primary_name);
         },
@@ -78,6 +78,9 @@ class BusinessListState extends State<BusinessedList>{
             ),
           ),
         )
+    )
+        : Center(
+      child: CircularProgressIndicator(),
     );
   }
   @override

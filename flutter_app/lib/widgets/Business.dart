@@ -8,6 +8,7 @@ import 'package:flutterapp/models/Product.dart';
 import 'package:flutterapp/services/webservice.dart';
 import 'package:flutterapp/models/invoice.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutterapp/widgets/Cart.dart';
 class Business extends StatelessWidget {
   final Value product;
 
@@ -59,7 +60,15 @@ class Business extends StatelessWidget {
           floatingActionButton:  FloatingActionButton.extended(
           icon: Icon(Icons.shopping_cart),
             label: Text('View Cart'),
-          onPressed: () {  },
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Cart(product: product),
+              ),
+            );
+
+          },
         )
 
       )
@@ -153,7 +162,7 @@ class _ProductList extends StatefulWidget {
 
 class _ProductListState extends State<_ProductList> {
   final dbHelper = DatabaseHelper.instance;
-  invoice _invoice = invoice('',0,'',0.00 ,'',0);
+  invoice _invoice = invoice('',0,'',0.00 ,'',0,'','','','');
   List<Value> _product = List<Value>();
   @override
   void initState() {
@@ -219,7 +228,7 @@ class _ProductListState extends State<_ProductList> {
   void Save(Value data) async{
     var uuid = Uuid();
     print(data.sellingPrice);
-    _invoice = new invoice(uuid.v1(), 3, '324324', (1 * data.sellingPrice), data.id, 1);
+    _invoice = new invoice(uuid.v1(), 3, '324324', (1 * data.sellingPrice), data.id, 1, 'Ehsan Bashir', '10001', data.primaryName, data.barcode);
 //    _invoice.Id=uuid.v1();
 //    _invoice.TenantId= 3;
 //    _invoice.CustomerId ='324324';

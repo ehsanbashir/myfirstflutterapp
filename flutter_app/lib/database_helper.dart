@@ -22,6 +22,10 @@ class DatabaseHelper {
   String ProductId= 'ProductId';
   String Quantity= 'Quantity';
   String NetAmount= 'NetAmount';
+  String CustomerName= 'CustomerName';
+  String CustomerCode= 'CustomerCode';
+  String ProductName= 'ProductName';
+  String ProductBarcode= 'ProductBarcode';
 
   // make this a singleton class
   DatabaseHelper._privateConstructor();
@@ -58,7 +62,11 @@ class DatabaseHelper {
             $CustomerId TEXT  NULL,
             $ProductId TEXT  NULL,
             $Quantity Int,
-            $NetAmount Double
+            $NetAmount Double,
+            $CustomerName TEXT  NULL,
+            $CustomerCode TEXT  NULL,
+            $ProductName TEXT  NULL,
+            $ProductBarcode TEXT  NULL
           )
           ''');
 
@@ -101,5 +109,23 @@ class DatabaseHelper {
   Future<int> delete(int id) async {
     Database db = await instance.database;
     return await db.delete(table, where: '$id = ?', whereArgs: [id]);
+  }
+
+
+  Future<List<invoice>> getInvcoieList() async {
+
+
+    var MapList = await queryAllRows(); // Get 'Map List' from database
+    int count = MapList.length;         // Count the number of map entries in db table
+
+
+    List<invoice> list = List<invoice>();
+
+    for (int i = 0; i < count; i++) {
+      list.add(invoice.fromMapObject(MapList[i]));
+    }
+
+
+    return list;
   }
 }

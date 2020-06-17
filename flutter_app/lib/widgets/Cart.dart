@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/models/Product.dart';
+import 'package:flutterapp/models/invoice.dart';
 
-class Business extends StatelessWidget {
+import '../database_helper.dart';
+
+class Cart extends StatelessWidget {
   final Value product;
 
-  Business({Key key, @required this.product}) : super(key: key);
+  Cart({Key key, @required this.product}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
@@ -14,46 +17,13 @@ class Business extends StatelessWidget {
         home:  Scaffold(
             appBar: AppBar(
               title: Text(product.businessPrimaryName),
-              actions: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.shopping_cart, color: Colors.white, size: 16.0,),
-                ),
-              ],
             ),
             body: Column(
               children: <Widget>[
                 _BusinessCardView(product),
-//                _ProductList(),
-
-//        new ButtonBar(
-//
-//          mainAxisSize: MainAxisSize.min, // this will take space as minimum as posible(to center)
-//          children: <Widget>[
-//            Container(
-//color: Colors.teal,
-//            child: new FlatButton(
-//
-//              child: new Text(
-//                  'Cart',
-//                style: TextStyle(
-//                  fontSize: 20,
-//                  fontWeight: FontWeight.bold,
-//                  color: Colors.white,
-//                ),
-//              ),
-//              onPressed: null,
-//            ),
-//            ),
-//          ],
-//        ),
+                _ProductList(),
               ],
             ),
-            floatingActionButton:  FloatingActionButton.extended(
-              icon: Icon(Icons.shopping_cart),
-              label: Text('View Cart'),
-              onPressed: () {  },
-            )
-
         )
     );
   }
@@ -111,4 +81,88 @@ Widget _BusinessCardView(Value data){
       ),
     ),
   );
+}
+
+class _ProductList extends StatefulWidget {
+  @override
+  _ProductListState createState() => _ProductListState();
+}
+
+class _ProductListState extends State<_ProductList> {
+  final dbHelper = DatabaseHelper.instance;
+
+  List<invoice> _cartproduct;
+  Future <void > getData() async{
+    print('getData');
+    final results = await dbHelper.queryAllRows();
+    print('results $results');
+
+
+    setState(() {
+      _cartproduct = results
+          .map<invoice>((json) => invoice.fromJson(json));
+    });
+
+    print('_cartproduct $_cartproduct[0].ProductName');
+  }
+  @override
+  void initState() {
+    super.initState();
+      updateListView();
+    }
+  @override
+  Widget build(BuildContext context) {
+
+    return Expanded(
+      child: ListView.builder(
+        itemCount: _cartproduct == null ? 0 : _cartproduct.length,
+
+        itemBuilder: (BuildContext context, int index){
+
+          return GestureDetector(
+            onTap: () async {
+
+//              print(_cartproduct[index].sellingPrice);
+            },
+            child: new Card(
+              child: Center(
+                child: new FlatButton(
+                  onPressed: (){
+//                    Save(_cartproduct[index]);
+                  },
+                  child: Row(
+                    children: <Widget>[
+//                      SizedBox(
+//                        height: 100.0,
+//                        width: 100.0,
+//                        child: Image.network(
+//                          _cartproduct[index].ProductName!= null ? _product[index].imageurl: 'https://image.freepik.com/free-vector/watercolor-background_87374-69.jpg',
+//                        ),
+//                      ),
+                      Column(
+                        children: <Widget>[
+                          Text( _cartproduct[index].ProductName),
+                          Text(_cartproduct[index].ProductBarcode),
+                          Text(_cartproduct[index].NetAmount.toString()),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  void updateListView() {
+      Future<List<invoice>> InvoiceListFuture = dbHelper.getInvcoieList();
+      InvoiceListFuture.then((result) {
+        setState(() {
+          this._cartproduct = result;
+        });
+      });
+  }
 }
